@@ -211,17 +211,17 @@ func (l logger) Fatalf(format string, args ...interface{}) {
 
 // Panic logs a message at level Panic on the standard logger.
 func (l logger) Panic(args ...interface{}) {
-	l.sourced().sourced().Panic(args...)
+	l.sourced().Panic(args...)
 }
 
 // Panicln logs a message at level Panic on the standard logger.
 func (l logger) Panicln(args ...interface{}) {
-	l.sourced().sourced().Panicln(args...)
+	l.sourced().Panicln(args...)
 }
 
 // Panicf logs a message at level Panic on the standard logger.
 func (l logger) Panicf(format string, args ...interface{}) {
-	l.sourced().sourced().Panicf(format, args...)
+	l.sourced().Panicf(format, args...)
 }
 
 // sourced adds a source field to the logger that contains
