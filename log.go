@@ -23,8 +23,11 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
+
+// Fields aliases logrus.Fields
+type Fields logrus.Fields
 
 type levelFlag struct{}
 
@@ -124,6 +127,10 @@ type Logger interface {
 	Panicf(string, ...interface{})
 
 	With(key string, value interface{}) Logger
+	WithField(key string, value interface{}) Logger
+
+	WithError(err error) Logger
+	WithFields(fields Fields) Logger
 }
 
 type logger struct {
@@ -132,6 +139,18 @@ type logger struct {
 
 func (l logger) With(key string, value interface{}) Logger {
 	return logger{l.entry.WithField(key, value)}
+}
+
+func (l logger) WithField(key string, value interface{}) Logger {
+	return l.With(key, value)
+}
+
+func (l logger)  WithError(err error) Logger {
+	return logger { l.entry.WithError(err) }
+}
+
+func (l logger)  WithFields(fields Fields) Logger {
+	return logger { l.entry.WithFields(logrus.Fields(fields)) }
 }
 
 // Debug logs a message at level Debug on the standard logger.
@@ -247,6 +266,18 @@ func Base() Logger {
 
 func With(key string, value interface{}) Logger {
 	return baseLogger.With(key, value)
+}
+
+func WithField(key string, value interface{}) Logger {
+	return baseLogger.With(key, value)
+}
+
+func WithError(err error) Logger {
+	return baseLogger.WithError(err)
+}
+
+func WithFields(fields Fields) Logger {
+	return baseLogger.WithFields(fields)
 }
 
 // Debug logs a message at level Debug on the standard logger.
